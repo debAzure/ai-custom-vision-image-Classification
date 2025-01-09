@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload and Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .form-container, .result-container {
+            width: 45%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            border: 2px dashed #ccc;
+        }
+        .form-container h2, .result-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-container input[type="file"] {
+            display: block;
+            margin: 20px auto;
+        }
+        .form-container button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .result-container img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .result-container ul {
+            list-style: none;
+            padding: 0;
+        }
+        .result-container li {
+            font-size: 16px;
+            padding: 5px 0;
+        }
+        .result-container li strong {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Image Upload Form -->
+        <div class="form-container">
+            <h2>Upload an Image</h2>
+            <form action="/" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/*" required>
+                <button type="submit">Upload & Predict</button>
+            </form>
+        </div>
+
+        <!-- Prediction Results -->
+        <div class="result-container">
+            <h2>Prediction Results</h2>
+
+            {% if image_data %}
+                <!-- Display uploaded image -->
+                <img src="data:image/png;base64,{{ image_data }}" alt="Uploaded Image">
+            {% else %}
+                <p>No image uploaded yet.</p>
+            {% endif %}
+
+            {% if results %}
+                <ul>
+                    {% for tag, probability in results %}
+                        <li><strong>{{ tag }}</strong>: {{ '%.2f' % (probability * 100) }}%</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No predictions available. Please upload an image.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
